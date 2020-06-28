@@ -12,6 +12,9 @@ services:
     restart: always
   backend:
     build: ./backend
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
     volumes:
       - ./backend:/app
     depends_on:

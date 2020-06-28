@@ -95,7 +95,12 @@ def move(index: int):
 
 @app.route('/api/game_info')
 def game_info():
-    return redis_client.get('game_state').decode()
+    info = redis_client.get('game_state') or None
+    if info:
+        info = info.decode()
+    else:
+        info = json.dumps(info)
+    return info
 
 
 @app.route('/api/last_results/<int:number>')

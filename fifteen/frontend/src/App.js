@@ -44,10 +44,12 @@ function App() {
         .then(response => response.json())
         .then(result => {
           setGameState(result);
-          if (result['finish_time']) {
-            setFinishTime(new Date(result['finish_time']));
-          } else if (result['start_time']) {
-            runTimer();
+          if (result) {
+            if (result['finish_time']) {
+              setFinishTime(new Date(result['finish_time']));
+            } else if (result['start_time']) {
+              runTimer();
+            }
           }
         });
       updateLastResults();
@@ -77,7 +79,7 @@ function App() {
           return {
             finishTime: new Date(result['finish_time']).toLocaleString(),
             elapsedTime: result['elapsed_time']
-          }
+          };
         });
         setLastResults(items);
       });
@@ -98,7 +100,7 @@ function App() {
       .then(response => response.json())
       .then(result => {
         setGameState(result);
-        if (result['finish_time']) {
+        if (result && result['finish_time']) {
           clearInterval(timerId);
           setTimerId(0);
           setFinishTime(new Date(result['finish_time']));
@@ -127,7 +129,7 @@ function App() {
            onClick={newGame}>Новая игра
       </div>
       {
-        lastResults ?
+        lastResults.length ?
           <div className={'results'}>
             <h2>Последние результаты</h2>
             {
