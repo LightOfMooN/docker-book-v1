@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  redis:
+    image: redis:alpine
+  db:
+    image: postgres:alpine
+    container_name: db
+    environment:
+      POSTGRES_USER: fifteen
+      POSTGRES_PASSWORD: secret_password
+    restart: always
+  backend:
+    build: ./backend
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - redis
+      - db
+    restart: always
+  frontend:
+    build: ./frontend
+    volumes:
+      - ./frontend:/app
+    environment:
+      - CI=true
+    restart: always
+  nginx:
+    build: ./nginx
+    ports:
+      - '80:80'
+    depends_on:
+      - frontend
+      - backend
+    restart: always
