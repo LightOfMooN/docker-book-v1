@@ -7,14 +7,16 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 import redis
 
+import config as c
+
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://fifteen:secret_password@db'
+app.config['SQLALCHEMY_DATABASE_URI'] = f'postgres://{c.DB_USER}:{c.DB_PASSWORD}@{c.DB_HOST}:{c.DB_PORT}/{c.DB_NAME}'
 
 db = SQLAlchemy(app)
 
 redis_client = redis.Redis(
-    host='redis',
-    port=6379,
+    host=c.REDIS_HOST,
+    port=c.REDIS_PORT,
 )
 
 
@@ -96,11 +98,7 @@ def move(index: int):
 @app.route('/api/game_info')
 def game_info():
     info = redis_client.get('game_state') or None
-    if info:
-        info = info.decode()
-    else:
-        info = json.dumps(info)
-    return info
+    return info.decode() if info else json.dumps(info)
 
 
 @app.route('/api/last_results/<int:number>')
@@ -115,7 +113,7 @@ def last_results(number):
 
 if __name__ == '__main__':
     app.run(
-        debug=True,
+        debug=c.DEBUG_MODE,
         host='0.0.0.0',
         port=5000,
     )

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import './App.css';
 
 
@@ -38,6 +38,23 @@ function App() {
   const [timerId, setTimerId] = useState(0);
   const [lastResults, setLastResults] = useState([]);
 
+  const runTimer = useCallback(
+    () => {
+      setFinishTime(new Date());
+      if (!timerId) {
+        setTimerId(
+          setInterval(
+            () => {
+              setFinishTime(new Date());
+            },
+            1000
+          )
+        );
+      }
+    },
+    [timerId, setTimerId]
+  );
+
   useEffect(
     () => {
       fetch('/api/game_info')
@@ -54,22 +71,8 @@ function App() {
         });
       updateLastResults();
     },
-    []
+    [runTimer]
   );
-
-  const runTimer = () => {
-    setFinishTime(new Date());
-    if (!timerId) {
-      setTimerId(
-        setInterval(
-          () => {
-            setFinishTime(new Date());
-          },
-          1000
-        )
-      );
-    }
-  };
 
   const updateLastResults = () => {
     fetch('/api/last_results/5')

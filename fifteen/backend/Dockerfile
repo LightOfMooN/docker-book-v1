@@ -14,4 +14,4 @@ CMD ["python", "main.py"]
 
 COPY requirements.txt /app/
 RUN pip install -r requirements.txt
-COPY main.py .
+COPY . .
