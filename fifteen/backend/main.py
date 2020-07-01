@@ -28,11 +28,23 @@ class Results(db.Model):
     elapsed_time = db.Column(db.Integer, index=True)
 
 
+def get_disorders(values):
+    count = 0
+    for index in range(len(values) - 1):
+        value = values[index]
+        for i in values[index + 1:]:
+            if i < value:
+                count += 1
+    return count
+
+
 @app.route('/api/new_game')
 def new_game():
     values = [i+1 for i in list(range(15))]
-    values.append('')
     random.shuffle(values)
+    while get_disorders(values) % 2:
+        random.shuffle(values)
+    values.append('')
     game_state = json.dumps({
         'values': values,
         'start_time': datetime.datetime.now(tz=pytz.UTC).isoformat(),
