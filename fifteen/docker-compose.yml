@@ -29,6 +29,7 @@ services:
   frontend:
     build: ./frontend
     volumes:
+      - node_modules:/app/node_modules
       - ./frontend:/app
     environment:
       - CI=true
@@ -41,3 +42,6 @@ services:
       - frontend
       - backend
     restart: always
+
+volumes:
+  node_modules:

@@ -7,11 +7,11 @@ RUN apt-get update && \
 EXPOSE 5000
 WORKDIR /app
 
-COPY ./docker-entrypoint.sh .
+COPY requirements.txt /app/
+RUN pip install -r requirements.txt
+
+COPY . .
+
 RUN chmod a+x ./docker-entrypoint.sh
 ENTRYPOINT ["./docker-entrypoint.sh"]
 CMD ["python", "main.py"]
-
-COPY requirements.txt /app/
-RUN pip install -r requirements.txt
-COPY . .
