@@ -25,7 +25,8 @@ class Results(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     finish_time = db.Column(db.DateTime)
-    elapsed_time = db.Column(db.Integer, index=True)
+    elapsed_time = db.Column(db.Integer)
+    score = db.Column(db.Float, index=True)
 
 
 def get_disorders(values):
@@ -40,13 +41,14 @@ def get_disorders(values):
 
 @app.route('/api/new_game')
 def new_game():
-    values = [i+1 for i in list(range(15))]
+    values = [i + 1 for i in list(range(15))]
     random.shuffle(values)
     while get_disorders(values) % 2:
         random.shuffle(values)
     values.append('')
     game_state = json.dumps({
         'values': values,
+        'move_count': 0,
         'start_time': datetime.datetime.now(tz=pytz.UTC).isoformat(),
         'finish_time': None,
     })
@@ -79,6 +81,7 @@ def move(index: int):
             values[index] = ''
             game_state['values'] = values
             moved = True
+            game_state['move_count'] += 1
             # Проверим на факт победы
             if values[-1] == '':
                 last_value = values[0]
@@ -88,16 +91,19 @@ def move(index: int):
                         win = False
                         break
                     last_value = value
+                # В случае победы сохраним затраченное время, и посчитаем очки
                 if win:
                     finish_time = datetime.datetime.now(tz=pytz.UTC)
                     game_state['finish_time'] = finish_time.isoformat()
+                    elapsed_time = (
+                        finish_time - datetime.datetime.fromisoformat(
+                            game_state['start_time']
+                        )
+                    ).seconds
                     result = Results(
                         finish_time=finish_time,
-                        elapsed_time=(
-                            finish_time - datetime.datetime.fromisoformat(
-                                game_state['start_time']
-                            )
-                        ).seconds
+                        elapsed_time=elapsed_time,
+                        score=round(game_state['move_count'] / elapsed_time)
                     )
                     db.session.add(result)
                     db.session.commit()
@@ -119,6 +125,7 @@ def last_results(number):
         {
             'finish_time': r.finish_time.isoformat(),
             'elapsed_time': r.elapsed_time,
+            'score': r.score,
         } for r in Results.query.order_by(Results.id.desc()).limit(number).all()
     ])
 
