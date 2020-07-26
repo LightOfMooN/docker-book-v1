@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  redis:
+    image: redis:alpine
+    restart: always
+  backend:
+    build: ./backend
+    environment:
+      DEBUG_MODE: "true"
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - redis
+    ports:
+      - "80:5000"
+    restart: always
