@@ -3,21 +3,8 @@ import json
 import random
 
 import pytz
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-import redis
 
-import config as c
-
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = f'postgres://{c.DB_USER}:{c.DB_PASSWORD}@{c.DB_HOST}:{c.DB_PORT}/{c.DB_NAME}'
-
-db = SQLAlchemy(app)
-
-redis_client = redis.Redis(
-    host=c.REDIS_HOST,
-    port=c.REDIS_PORT,
-)
+from app import db, redis_client, app, run
 
 
 class Results(db.Model):
@@ -131,8 +118,4 @@ def last_results(number):
 
 
 if __name__ == '__main__':
-    app.run(
-        debug=c.DEBUG_MODE,
-        host='0.0.0.0',
-        port=5000,
-    )
+    run()
