@@ -7,10 +7,10 @@ from flask import Flask
 import redis
 
 # Переменная, содержащая значение активности режима отладки (Да/Нет)
-DEBUG_MODE = bool(os.environ.get('DEBUG_MODE', False))
+DEBUG_MODE = str(os.environ.get('DEBUG_MODE')).lower() in {'true', '1', 'yes'}
 
 # Переменные хоста и порта Redis
-REDIS_HOST = os.environ.get('REDIS_HOST', 'redis')
+REDIS_HOST = os.environ.get('REDIS_HOST', 'cache')
 REDIS_PORT = os.environ.get('REDIS_PORT', '6379')
 
 # Инициализация Flask-приложения
