@@ -9,7 +9,7 @@ from config import app, redis_client, run
 # Регистрируем функцию, обрабатывающую запрос по пути /api/new_game
 @app.route('/api/new_game')
 def new_game():
-    # Сфромируем список из 15 значений (от 1 до 15)
+    # Сформируем список из 15 значений (от 1 до 15)
     values = [i+1 for i in list(range(15))]
     # Перемешаем значения списка в случайном порядке
     random.shuffle(values)
@@ -39,5 +39,4 @@ def game_info():
 
 # При выполнении текущего файла запустим веб-сервер
 if __name__ == '__main__':
-    print('Запуск приложения')
     run()

@@ -4,7 +4,8 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 import redis
 
-DEBUG_MODE = bool(os.environ.get('DEBUG_MODE', False))
+# Переменная, содержащая значение активности режима отладки (Да/Нет)
+DEBUG_MODE = str(os.environ.get('DEBUG_MODE')).lower() in {'true', '1', 'yes'}
 
 REDIS_HOST = os.environ.get('REDIS_HOST', 'redis')
 REDIS_PORT = os.environ.get('REDIS_PORT', '6379')
