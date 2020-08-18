@@ -23,7 +23,7 @@ def new_game():
     })
     # Сохраним информацию в Redis
     redis_client.set('game_state', game_state)
-    # Вернём инфомрацию в ответ на запрос
+    # Вернём информацию в ответ на запрос
     return game_state
 
 

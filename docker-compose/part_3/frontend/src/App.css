@@ -1,0 +1,57 @@
+.game {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+h1 {
+  color: #82c85a;
+  font-size: 32px;
+}
+
+.move-count {
+  margin: 20px 0;
+}
+
+.board {
+  width: 408px;
+  padding: 5px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  background: #fafafa;
+}
+
+.board > div {
+  width: 90px;
+  height: 90px;
+  float: left;
+  margin: 5px;
+  line-height: 90px;
+  font-size: 40px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background: #fff;
+}
+
+.board > div.movable {
+  cursor: pointer;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.cell.movable:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.new-game {
+  cursor: pointer;
+  padding: 10px 20px 12px;
+  color: #fff;
+  margin-top: 20px;
+  border-radius: 10px;
+  background: #82c85a;
+}
+
+.new-game:hover {
+  background: #73b150;
+}
