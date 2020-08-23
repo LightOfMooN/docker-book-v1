@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 
 
@@ -26,7 +26,7 @@ function App() {
   return (
     <div className='game'>
       {
-        gameState && Object.keys(gameState).length !== 0 &&
+        gameState && Object.keys(gameState).length &&
         <>
           <div className='move-count'>
             Ходов: <b>{gameState['move_count']}</b>
