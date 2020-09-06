@@ -26,7 +26,7 @@ function App() {
   return (
     <div className='game'>
       {
-        gameState && Object.keys(gameState).length &&
+        gameState && Object.keys(gameState).length > 0 &&
         <>
           <div className='move-count'>
             Ходов: <b>{gameState['move_count']}</b>
