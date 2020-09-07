@@ -4,19 +4,39 @@ import './App.css';
 
 function App() {
   const [gameState, setGameState] = useState();
+  const [lastResults, setLastResults] = useState([]);
+
+  const updateLastResults = () => {
+    fetch('/api/last_results/5')
+      .then(response => response.json())
+      .then(results => {
+        setLastResults(results);
+      });
+  };
 
   const callApi = (url) => {
     fetch(url)
       .then(response => response.json())
       .then(result => {
-          setGameState(result);
-        }
-      );
+        setGameState(result);
+      });
   };
 
   useEffect(
-    () => callApi('/api/game_info'),
+    () => {
+      callApi('/api/game_info');
+      updateLastResults();
+    },
     []
+  );
+
+  useEffect(
+    () => {
+      if (gameState && gameState['win']) {
+        updateLastResults();
+      }
+    },
+    [gameState]
   );
 
   const newGame = () => callApi('/api/new_game');
@@ -26,7 +46,7 @@ function App() {
   return (
     <div className='game'>
       {
-        gameState && Object.keys(gameState).length &&
+        gameState && Object.keys(gameState).length > 0 &&
         <>
           <div className='move-count'>
             Ходов: <b>{gameState['move_count']}</b>
@@ -39,6 +59,13 @@ function App() {
       <div className='new-game'
            onClick={newGame}>Новая игра
       </div>
+      {
+        lastResults.length > 0 &&
+        <div className='last-results'>
+          Последние результаты (кол-во ходов до победы):&nbsp;
+          {lastResults.join(', ')}
+        </div>
+      }
     </div>
   );
 }
@@ -62,7 +89,7 @@ function Board({gameState, moveHandler}) {
       {
         values.map(
           (i, idx) =>
-            <div className={movables.has(idx) && 'movable'}
+            <div className={movables.has(idx) ? 'movable' : null}
                  onClick={movables.has(idx) ? () => moveHandler(idx) : null}
                  key={i}>
               {i}
