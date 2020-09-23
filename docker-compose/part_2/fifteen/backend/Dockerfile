@@ -12,6 +12,7 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
+ENV FLASK_APP="api.py"
 RUN chmod a+x ./docker-entrypoint.sh
 ENTRYPOINT ["./docker-entrypoint.sh"]
 CMD ["python", "api.py"]

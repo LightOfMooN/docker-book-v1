@@ -7,6 +7,6 @@ then
     sleep 0.5
   done
   echo "Database started"
-  python3 manage.py db upgrade || exit 1
+  flask db upgrade || exit 1
 fi
 exec "$@"
