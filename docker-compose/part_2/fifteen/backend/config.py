@@ -16,8 +16,10 @@ DB_ACTIVE = bool(DB_HOST)
 
 app = Flask(__name__)
 
-if DB_HOST:
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'postgres://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
+if DB_ACTIVE:
+    app.config['SQLALCHEMY_DATABASE_URI'] = (
+        f'postgres://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
+    )
 db = SQLAlchemy(app)
 
 redis_client = redis.Redis(

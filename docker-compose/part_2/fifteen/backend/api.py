@@ -58,7 +58,7 @@ def move(index: int):
                         break
                     last_value = value
                 game_state['win'] = win
-                if win:
+                if win and DB_ACTIVE:
                     result = Results(move_count=game_state['move_count'])
                     db.session.add(result)
                     db.session.commit()
@@ -68,7 +68,7 @@ def move(index: int):
     return game_state
 
 
-@app.route('/api/last_results/<int:number>')
+@app.route('/api/last_results/<int(min=1):number>')
 def last_results(number):
     results = []
     if DB_ACTIVE:
