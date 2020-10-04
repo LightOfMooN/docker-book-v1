@@ -4,6 +4,15 @@ from config import app, redis_client, run, db, DB_ACTIVE
 from models import Results
 
 
+def get_disorders(values):
+    count = 0
+    for index, value in enumerate(values):
+        for i in values[index + 1:]:
+            if i < value:
+                count += 1
+    return count
+
+
 @app.route('/')
 def main():
     return 'API-сервер работает'
@@ -12,7 +21,9 @@ def main():
 @app.route('/api/new_game')
 def new_game():
     values = [i + 1 for i in list(range(15))]
-    # random.shuffle(values)
+    random.shuffle(values)
+    while get_disorders(values) % 2:
+        random.shuffle(values)
     values.append('')
     game_state = json.dumps({
         'values': values,
