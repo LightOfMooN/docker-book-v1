@@ -12,7 +12,7 @@ def main():
 @app.route('/api/new_game')
 def new_game():
     values = [i + 1 for i in list(range(15))]
-    random.shuffle(values)
+    # random.shuffle(values)
     values.append('')
     game_state = json.dumps({
         'values': values,
